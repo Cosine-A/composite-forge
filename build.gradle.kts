@@ -41,7 +41,6 @@ dependencies {
 
     implementation(transitiveInclude(compose.desktop.windows_x64)!!)
     implementation(transitiveInclude(compose.material3)!!)
-    implementation(transitiveInclude(compose.materialIconsExtended)!!)
 
     transitiveInclude.resolvedConfiguration.lenientConfiguration.artifacts.forEach {
         include(it.moduleVersion.id.toString())

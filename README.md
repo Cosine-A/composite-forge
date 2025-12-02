@@ -10,6 +10,7 @@
     *   **Screens**: Create full-screen UIs with `ComposeScreen`.
     *   **HUD**: Render overlays with `ComposeHud`.
     *   **Items**: Render Minecraft ItemStacks inside Compose layouts.
+    *   **Textures**: Render Minecraft textures (ResourceLocations) inside Compose layouts.
 *   **Input Handling**: Automatic mapping of Minecraft mouse and keyboard events to Compose.
 
 ## Installation
@@ -84,6 +85,23 @@ import net.minecraft.world.item.ItemStack
 
 // Inside a Composable
 Components.Item(ItemStack(Items.DIAMOND_SWORD))
+```
+
+### Rendering Textures
+
+You can render any Minecraft texture using `Components.Texture`.
+
+```kotlin
+import dev.aperso.composite.component.Components
+import net.minecraft.resources.ResourceLocation
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.unit.dp
+
+// Inside a Composable
+Components.Texture(
+    texture = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/dirt.png"),
+    modifier = Modifier.size(64.dp)
+)
 ```
 
 ## Requirements

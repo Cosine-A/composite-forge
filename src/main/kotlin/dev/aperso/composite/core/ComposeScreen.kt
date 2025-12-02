@@ -37,7 +37,7 @@ import org.lwjgl.glfw.GLFWCharCallbackI
 import kotlin.math.pow
 
 @OptIn(InternalComposeUiApi::class, ExperimentalComposeUiApi::class)
-class ComposeScreen(
+open class ComposeScreen(
     content: @Composable () -> Unit,
     title: Component = Component.empty(),
     private val platformContext: PlatformContext = PlatformContext.Empty
