@@ -15,11 +15,15 @@
 
 ## Installation
 
-Add the library to your `build.gradle.kts`:
+Add the JitPack repository and the dependency to your `build.gradle.kts`:
 
 ```kotlin
+repositories {
+    maven("https://jitpack.io")
+}
+
 dependencies {
-    modImplementation("dev.aperso.composite:composite:0.1.0")
+    modImplementation("com.github.apersomany:composite:43be3e88bd")
 }
 ```
 
