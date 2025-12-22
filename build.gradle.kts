@@ -39,8 +39,8 @@ dependencies {
         exclude("org.jetbrains.kotlinx")
     }
 
-    implementation(transitiveInclude(compose.desktop.windows_x64)!!)
-    implementation(transitiveInclude(compose.material3)!!)
+    api(transitiveInclude(compose.desktop.windows_x64)!!)
+    api(transitiveInclude(compose.material3)!!)
 
     transitiveInclude.resolvedConfiguration.lenientConfiguration.artifacts.forEach {
         include(it.moduleVersion.id.toString())
