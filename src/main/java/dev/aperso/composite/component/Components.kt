@@ -20,7 +20,7 @@ object Components {
         vHeight: Float = 1f
     ) = dev.aperso.composite.component.Texture(texture, modifier, u, v, uWidth, vHeight)
 
-    @Composable
+    /*@Composable
     fun Texture(
         texture: AbstractTexture,
         modifier: Modifier = Modifier,
@@ -28,5 +28,5 @@ object Components {
         v: Float = 0f,
         uWidth: Float = 1f,
         vHeight: Float = 1f
-    ) = dev.aperso.composite.component.Texture(texture, modifier, u, v, uWidth, vHeight)
+    ) = dev.aperso.composite.component.Texture(texture, modifier, u, v, uWidth, vHeight)*/
 }

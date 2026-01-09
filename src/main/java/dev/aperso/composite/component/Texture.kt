@@ -2,32 +2,26 @@ package dev.aperso.composite.component
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameNanos
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.BufferUploader
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
-import com.mojang.blaze3d.vertex.Tesselator
-import com.mojang.blaze3d.vertex.VertexFormat
+import com.mojang.blaze3d.vertex.*
 import dev.aperso.composite.skia.LocalSkiaSurface
 import kotlinx.coroutines.isActive
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.texture.AbstractTexture
 import net.minecraft.resources.ResourceLocation
+import org.joml.Matrix4f
+import org.joml.Vector3f
 import org.lwjgl.opengl.GL30
+import org.lwjgl.system.MemoryUtil
 
-@Composable
+/*@Composable
 fun Texture(
     texture: ResourceLocation,
     modifier: Modifier = Modifier,
@@ -38,11 +32,11 @@ fun Texture(
 ) {
     val abstractTexture = Minecraft.getInstance().textureManager.getTexture(texture)
     Texture(abstractTexture, modifier, u, v, uWidth, vHeight)
-}
+}*/
 
 @Composable
 fun Texture(
-    texture: AbstractTexture,
+    texture: ResourceLocation,
     modifier: Modifier = Modifier,
     u: Float = 0f,
     v: Float = 0f,
@@ -82,22 +76,23 @@ fun Texture(
                         val widthGui = bounds.width * density
                         val heightGui = bounds.height * density
                         
-                        pose().translate(guiX, guiY, 0f)
+                        pose().translate(guiX, guiY, 1000f)
                         
-                        RenderSystem.setShaderTexture(0, texture.id)
+                        RenderSystem.setShaderTexture(0, texture)
                         RenderSystem.setShader(GameRenderer::getPositionTexShader)
                         val matrix4f = pose().last().pose()
                         val tesselator = Tesselator.getInstance()
-                        val buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
-                        
-                        buffer.addVertex(matrix4f, 0f, heightGui, 0f).setUv(u, v + vHeight)
-                        buffer.addVertex(matrix4f, widthGui, heightGui, 0f).setUv(u + uWidth, v + vHeight)
-                        buffer.addVertex(matrix4f, widthGui, 0f, 0f).setUv(u + uWidth, v)
-                        buffer.addVertex(matrix4f, 0f, 0f, 0f).setUv(u, v)
-                        
-                        BufferUploader.drawWithShader(buffer.buildOrThrow())
-                        
+                        val bufferBuilder = tesselator.builder
+                        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
+
+                        bufferBuilder.addVertex(matrix4f, 0f, heightGui, 0f).uv(u, v + vHeight)
+                        bufferBuilder.addVertex(matrix4f, widthGui, heightGui, 0f).uv(u + uWidth, v + vHeight)
+                        bufferBuilder.addVertex(matrix4f, widthGui, 0f, 0f).uv(u + uWidth, v)
+                        bufferBuilder.addVertex(matrix4f, 0f, 0f, 0f).uv(u, v)
+
+                        BufferUploader.drawWithShader(bufferBuilder.end())
                         pose().popPose()
+
                         GL30.glDisable(GL30.GL_SCISSOR_TEST)
                     }
                 }
@@ -105,4 +100,9 @@ fun Texture(
         }
     }
     Spacer(modifier.fillMaxSize().onGloballyPositioned { coordinates = it })
+}
+
+private fun VertexConsumer.addVertex(pose: Matrix4f, x: Float, y: Float, z: Float): VertexConsumer {
+    val vector3f = pose.transformPosition(x, y, z, Vector3f())
+    return this.vertex(vector3f.x().toDouble(), vector3f.y().toDouble(), vector3f.z().toDouble())
 }

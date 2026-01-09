@@ -40,7 +40,7 @@ import kotlin.math.pow
 open class ComposeScreen(
     title: Component = Component.empty(),
     content: @Composable () -> Unit,
-): Screen(title), PlatformContext by PlatformContext.Empty {
+) : Screen(title), PlatformContext by PlatformContext.Empty {
     private val surface = SkiaSurface()
     private val scene = CanvasLayersComposeScene(platformContext = this)
 
@@ -60,7 +60,8 @@ open class ComposeScreen(
                     if (text != null) {
                         minecraft?.keyboardHandler?.clipboard = text
                     }
-                } catch (ignored: Exception) {}
+                } catch (ignored: Exception) {
+                }
             }
         }
     }
@@ -117,8 +118,8 @@ open class ComposeScreen(
         scene.size = IntSize(window.width, window.height)
         scene.density = Density(scale * 0.5f, 1.25f)
         if (charCallback == null) {
-            charCallback = GLFW.glfwSetCharCallback(minecraft!!.window.window) {
-                _, codepoint -> onEditCommand?.invoke(listOf(CommitTextCommand(Char(codepoint).toString(), 1)))
+            charCallback = GLFW.glfwSetCharCallback(minecraft!!.window.window) { _, codepoint ->
+                onEditCommand?.invoke(listOf(CommitTextCommand(Char(codepoint).toString(), 1)))
             }
         }
     }
@@ -171,10 +172,10 @@ open class ComposeScreen(
         return true
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double): Boolean {
         this.scrollX += scrollX.toFloat()
-        this.scrollY -= scrollY.toFloat()
-        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
+        //this.scrollY -= scrollY.toFloat()
+        return super.mouseScrolled(mouseX, mouseY, scrollX)
     }
 
     fun keyEvent(type: KeyEventType, keyCode: Int, modifiers: Int): KeyEvent {

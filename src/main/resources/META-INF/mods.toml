@@ -1,0 +1,10 @@
+modLoader="javafml"
+loaderVersion="[44,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="compositeforge"
+version="1.0.0"
+displayName="Composite Forge"
+authors="apersomany, Cosine_A"
+description="A library mod that lets you use Jetpack Compose and Material 3 in Minecraft."
